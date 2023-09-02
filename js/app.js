@@ -1,5 +1,6 @@
-import{db}from './config.js'
-import{ref,push ,onChildAdded} from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js'
+import {db} from "./config.js"
+import {ref, push, onChildAdded} from "https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js"
+
 document.addEventListener('DOMContentLoaded',()=>{
 //get all required elements
 const messageInput = document.getElementById('message-input')
@@ -23,14 +24,16 @@ logoutButton.addEventListener('click',()=>{
     window.location.reload()
 })
 
+
+//add msg on chat
 const sendMessage=()=>{
-    localStorage.getItem("name")
+    // localStorage.getItem("name")
     const name = localStorage.getItem('name')
-    const message =messageInput.ariaValueMax.trim()
+    const message =messageInput.value.trim()
 
     if(name && message){
         const messagesRef = ref(db,'messages')
-        .push(messagesRef,{
+        push(messagesRef,{
             name:name,
             message:message,
             timestamp: new Date().getTime(),
@@ -49,16 +52,16 @@ messageInput.addEventListener("keypress",event=>{
 })
 
 //add message funciton
-const addMessage =(name,message){
+const addMessage =(name,message)=>{
     const messageDiv = document.createElement("div")
     messageDiv.innerHTML = `<strong>${name}:</strong> ${message}`
     messageContainer.appendChild(messageDiv)
-    messageContainer.scrollTop=
+    messageContainer.scrollTop=messageContainer.scrollHeight
 }
 
 const messagesRef = ref(db,"messages")
 onChildAdded(messagesRef ,(snapshot)=>{
     const messageData  =snapshot.val()
-    addMessage(messageData.ma)
+    addMessage(messageData.name , messageData.message)
 })
 })
